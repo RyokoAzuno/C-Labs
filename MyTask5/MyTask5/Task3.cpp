@@ -48,13 +48,13 @@ void ArraySeq()
 	for (size_t i = 0; i < SIZE; i++)
 	{
 		// If sequence contains at least 2 negative numbers 
-		if (arr[i] < 0 && arr[i + 1] < 0 && i < (SIZE - 1)) 
+		if (i < (SIZE - 1) && arr[i] < 0 && arr[i + 1] < 0)
 		{
 			//int start_idx = i;	// start index for temp array
 			int last_idx = i;	// last index for temp array
 			int k = 0;			// temporal variable for function - AbsAvg()
 			int tmp[100];		// temporal array for negative numbers
-			while (arr[last_idx] < 0)
+			while (arr[last_idx] < 0 && last_idx < SIZE)
 			{
 				++last_idx;
 			}
