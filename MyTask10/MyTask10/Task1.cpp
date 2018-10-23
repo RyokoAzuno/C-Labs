@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Task1.h"
+#include <ctime>
 
 using namespace std;
 
@@ -11,18 +12,21 @@ DWORD WINAPI filler(LPVOID data)
 	coord.Y = (short)data;
 	coord.X = 0;
 	char ch = (char)223;
+	srand(static_cast<unsigned>(time(NULL)));
+	short color = 0 + rand() % 15;
 	InitializeCriticalSection(&critsect);
 	for (int i = 0; i < 50; ++i, coord.X += 1)
 	{
 		EnterCriticalSection(&critsect);
 		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(handle, 4); // Red
+		SetConsoleTextAttribute(handle, color); // Color
 		SetConsoleCursorPosition(handle, coord);
 		cout << ch;
 		LeaveCriticalSection(&critsect);
-		Sleep(300);
+		Sleep(100);
 	}
-	system("pause");
+	//system("pause");
+	system("cls");
 	return ((DWORD)data);
 }
 
