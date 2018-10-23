@@ -3,96 +3,59 @@
 
 using namespace std;
 
-DWORD WINAPI th1(LPVOID data)
+static CRITICAL_SECTION critsect;
+
+DWORD WINAPI filler(LPVOID data)
 {
-	bool flag = false;
-	CRITICAL_SECTION critsect;
+	COORD coord;
+	coord.Y = (short)data;
+	coord.X = 0;
+	char ch = (char)223;
 	InitializeCriticalSection(&critsect);
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 50; ++i, coord.X += 1)
 	{
 		EnterCriticalSection(&critsect);
 		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD coord;
-		coord.X = 5;
-		coord.Y = 3;
-
 		SetConsoleTextAttribute(handle, 4); // Red
 		SetConsoleCursorPosition(handle, coord);
-		if (!flag)
-		{
-			cout << "R";
-			flag = !flag;
-		}
-		else
-		{
-			cout << " ";
-			flag = !flag;
-		}
-		Sleep(100);
+		cout << ch;
 		LeaveCriticalSection(&critsect);
+		Sleep(300);
 	}
-
+	system("pause");
 	return ((DWORD)data);
 }
-DWORD WINAPI th2(LPVOID data)
+
+DWORD WINAPI th(LPVOID data)
 {
+	MyData *info = reinterpret_cast<MyData*>(data);
 	bool flag = false;
-	CRITICAL_SECTION critsect;
+
 	InitializeCriticalSection(&critsect);
 	for (int i = 0; i < 50; ++i)
 	{
 		EnterCriticalSection(&critsect);
 		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD coord;
-		coord.X = 7;
-		coord.Y = 5;
 
-		SetConsoleTextAttribute(handle, 2); // Green
-		SetConsoleCursorPosition(handle, coord);
+		SetConsoleTextAttribute(handle, info->color); // Red
+		SetConsoleCursorPosition(handle, info->coord);
 		if (!flag)
 		{
-			cout << "G";
+			cout << info->str;
 			flag = !flag;
 		}
 		else
 		{
-			cout << " ";
+			cout << "   ";
 			flag = !flag;
 		}
-		Sleep(100);
 		LeaveCriticalSection(&critsect);
+		Sleep(100);
 	}
 
 	return ((DWORD)data);
 }
-DWORD WINAPI th3(LPVOID data)
-{
-	bool flag = false;
-	CRITICAL_SECTION critsect;
-	InitializeCriticalSection(&critsect);
-	for (int i = 0; i < 50; ++i)
-	{
-		EnterCriticalSection(&critsect);
-		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD coord;
-		coord.X = 9;
-		coord.Y = 7;
 
-		SetConsoleTextAttribute(handle, 9); // Blue
-		SetConsoleCursorPosition(handle, coord);
-		if (!flag)
-		{
-			cout << "B";
-			flag = !flag;
-		}
-		else
-		{
-			cout << " ";
-			flag = !flag;
-		}
-		Sleep(100);
-		LeaveCriticalSection(&critsect);
-	}
 
-	return ((DWORD)data);
-}
+
+

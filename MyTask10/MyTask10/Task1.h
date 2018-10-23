@@ -2,7 +2,15 @@
 #include <Windows.h>
 #include <iostream>
 #include <process.h>
+#include <string>
 
-DWORD WINAPI th1(LPVOID data);
-DWORD WINAPI th2(LPVOID data);
-DWORD WINAPI th3(LPVOID data);
+struct MyData
+{
+	COORD coord;
+	std::string str;
+	WORD color; // 4 - Red, 2 - Green, 3 - Blue
+};
+
+DWORD WINAPI th(LPVOID data);
+DWORD WINAPI filler(LPVOID data);
+
